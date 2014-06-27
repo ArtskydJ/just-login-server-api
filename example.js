@@ -1,0 +1,1 @@
+var jlCore = require('just-login-core')
