@@ -14,19 +14,16 @@ function UUID() {
 }
 
 function createNewSession(jlc, cb) { //cb(err, api, token)
-	console.log('creating new session')
 	var sessionId = UUID()
 	cb(null, getFullApi(jlc, sessionId), sessionId) //obj = {token, contactAddress}
 }
 
 function continueExistingSession(jlc, sessionId, cb) { //cb(err, api, session)
-	console.log('continuing old session: '+sessionId)
 	jlc.isAuthenticated(sessionId, function(err, addr) {
-		if (!err) {
+		if (err || !addr)
+			cb(err || new Error("Invalid sessionId"))
+		else
 			cb(null, getFullApi(jlc, sessionId), sessionId)
-		} else { //wouldn't you want to run createNewSession here?
-			cb(new Error("Invalid session identification"))
-		}
 	})
 }
 
