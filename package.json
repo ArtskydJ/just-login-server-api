@@ -1,0 +1,23 @@
+{
+  "name": "just-login-server-api",
+  "version": "0.0.0",
+  "description": "Server code for the Just Login module",
+  "main": "browserApi.js",
+  "dependencies": {},
+  "devDependencies": {
+    "tap": "~0.4.11"
+  },
+  "scripts": {
+    "test": "tap test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/ArtskydJ/just-login-server-api.git"
+  },
+  "author": "josephdykstra@gmail.com",
+  "license": "mit",
+  "bugs": {
+    "url": "https://github.com/ArtskydJ/just-login-server-api/issues"
+  },
+  "homepage": "https://github.com/ArtskydJ/just-login-server-api"
+}
