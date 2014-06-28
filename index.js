@@ -2,7 +2,7 @@ function getFullApi(jlc, sessionId) {
 	return {
 		beginAuthentication: jlc.beginAuthentication.bind(jlc, sessionId),
 		isAuthenticated: jlc.isAuthenticated.bind(jlc, sessionId),
-		unAuthenticate: jlc.unAuthenticate.bind(jlc, sessionId)
+		unauthenticate: jlc.unauthenticate.bind(jlc, sessionId)
 	}
 }
 
@@ -13,16 +13,20 @@ function UUID() {
 	})
 }
 
-function createNewSession(jlc, cb) { //cb(err, api, token)
+function createNewSession(jlc, cb) { //cb(err, api, sessionId)
 	var sessionId = UUID()
-	cb(null, getFullApi(jlc, sessionId), sessionId) //obj = {token, contactAddress}
+	cb(null, getFullApi(jlc, sessionId), sessionId)
 }
 
-function continueExistingSession(jlc, sessionId, cb) { //cb(err, api, session)
+function continueExistingSession(jlc, sessionId, cb) { //cb(err, api, sessionId)
 	jlc.isAuthenticated(sessionId, function(err, addr) {
-		if (err || !addr)
-			cb(err || new Error("Invalid sessionId"))
-		else
+		if (err)
+			cb(err)
+		else if (!addr) {
+			var temp = new Error("Invalid Session Id")
+			temp.invalidSessionId = true
+			cb(temp)
+		} else
 			cb(null, getFullApi(jlc, sessionId), sessionId)
 	})
 }
