@@ -1,14 +1,17 @@
 just-login-server-api
 =====================
 
-- [Information](https://github.com/ArtskydJ/just-login-server-api#information)
+- [Information](#information)
 - [Install](https://github.com/ArtskydJ/just-login-server-api#install)
 - [Require and Construct](https://github.com/ArtskydJ/just-login-server-api#require-and-construct)
-- [Methods](https://github.com/ArtskydJ/just-login-server-api#methods)
-- [jlsa.isAuthenticated(cb)](https://github.com/ArtskydJ/just-login-server-api#jlsaisauthenticatedcb)
-- [jlsa.beginAuthentication(contactAddress)](https://github.com/ArtskydJ/just-login-server-api#jlsabeginauthenticationcontactaddress)
+- [jsla methods](https://github.com/ArtskydJ/just-login-server-api#jsla-methods)
+- [jlsa.createNewSession(cb)](https://github.com/ArtskydJ/just-login-server-api#jlsacreatenewsessioncb)
+- [jlsa.continueExistingSession(sessionId, cb)](https://github.com/ArtskydJ/just-login-server-api#jlsacontinueexistingsessionsessionid-cb)
+- [api methods](https://github.com/ArtskydJ/just-login-server-api#api-methods)
+- [api.isAuthenticated(cb)](https://github.com/ArtskydJ/just-login-server-api#apiisauthenticatedcb)
+- [api.beginAuthentication(contactAddress)](https://github.com/ArtskydJ/just-login-server-api#apibeginauthenticationcontactaddress)
 
-#Information
+##Information
 
 Server for the Just Login module.
 
@@ -37,30 +40,55 @@ Merge the modules:
 
 	var jlsa = Jlsa(jlc)
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Words below this point are probably incorrect, and will be editted soon. Please rely on nothing below this point. Thanks.
+##jlsa methods
 
-##Methods
+###jlsa.createNewSession(cb) //err api sessionid
 
-###jlsa.isAuthenticated(cb)
+	jlsa.createNewSession(function (err, api, sessionId) {
+		if (!err) {
+			console.log(api) //logs { beginAuthentication: [Function],
+			                 //       isAuthenticated: [Function],
+			                 //       unAuthenticate: [Function] }
+			console.log(sessionId) //logs the session id string
+		}
+	})
+
+###jlsa.continueExistingSession(sessionId, cb) //err api sessionid
+
+	jlsa.continueExistingSession(sessionId, function(err, api, sessionId) {
+		if (!err) {
+			console.log(api) //logs { beginAuthentication: [Function],
+			                 //       isAuthenticated: [Function],
+			                 //       unAuthenticate: [Function] }
+			console.log(sessionId) //logs the session id string
+		} else if (err.invalidSessionId) {
+			console.log("bad session id passed to continueExistingSession")
+		} else {
+			console.log("error:", err.message)
+		}
+	})
+
+##api methods
+
+###api.isAuthenticated(cb)
 
 Calls the callback with null or a contact address if authenticated
 
 Example of an authenticated user (a user who was logged in previously)
 
-	jlsa.isAuthenticated("previouslyLoggedInSessionId", function(err, contactAddress) {
+	api.isAuthenticated("previouslyLoggedInSessionId", function(err, contactAddress) {
 		if (!err)
 			console.log(contactAddress) //logs: "fake@example.com"
 	})
 
 Example of an unauthenticated user (a user who was NOT logged in previously)
 
-	jlsa.isAuthenticated("notPreviouslyLoggedInSessionId", function(err, contactAddress) {
+	api.isAuthenticated("notPreviouslyLoggedInSessionId", function(err, contactAddress) {
 		if (!err)
 			console.log(contactAddress) //logs: ""
 	})
 
-###jlsa.beginAuthentication(contactAddress)
+###api.beginAuthentication(contactAddress)
 
 Emits an event with a secret token and the contact address, so somebody can go send a message to that address.
 
@@ -70,4 +98,11 @@ Emits an event with a secret token and the contact address, so somebody can go s
 		console.log(authInit.sessionId) //logs the session id
 	})
 
-(Suggestion: use the [Just-Login-Emailer](https://github.com/coding-in-the-wild/just-login-emailer) or my fork of the same [emailer](https://github.com/ArtskydJ/just-login-emailer) for this.)
+(Suggestion: use the [Just-Login-Emailer](https://github.com/coding-in-the-wild/just-login-emailer) or my fork of the same [emailer](https://github.com/ArtskydJ/just-login-emailer) to catch the event.)
+
+###api.unauthenticate(contactAddress)
+
+Logs a user out
+
+	//example here lol
+
