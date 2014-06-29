@@ -2,14 +2,14 @@ just-login-server-api
 =====================
 
 - [Information](#information)
-- [Install](https://github.com/ArtskydJ/just-login-server-api#install)
-- [Require and Construct](https://github.com/ArtskydJ/just-login-server-api#require-and-construct)
-- [jsla methods](https://github.com/ArtskydJ/just-login-server-api#jsla-methods)
-- [jlsa.createNewSession(cb)](https://github.com/ArtskydJ/just-login-server-api#jlsacreatenewsessioncb)
-- [jlsa.continueExistingSession(sessionId, cb)](https://github.com/ArtskydJ/just-login-server-api#jlsacontinueexistingsessionsessionid-cb)
-- [api methods](https://github.com/ArtskydJ/just-login-server-api#api-methods)
-- [api.isAuthenticated(cb)](https://github.com/ArtskydJ/just-login-server-api#apiisauthenticatedcb)
-- [api.beginAuthentication(contactAddress)](https://github.com/ArtskydJ/just-login-server-api#apibeginauthenticationcontactaddress)
+- [Install](#install)
+- [Require and Construct](#require-and-construct)
+- [jsla methods](#jsla-methods)
+- [jlsa.createNewSession(cb)](#jlsacreatenewsessioncb)
+- [jlsa.continueExistingSession(sessionId, cb)](#jlsacontinueexistingsessionsessionid-cb)
+- [api methods](#api-methods)
+- [api.isAuthenticated(cb)](#apiisauthenticatedcb)
+- [api.beginAuthentication(contactAddress)](#apibeginauthenticationcontactaddress)
 
 ##Information
 
@@ -104,5 +104,11 @@ Emits an event with a secret token and the contact address, so somebody can go s
 
 Logs a user out
 
-	//example here lol
-
+	jlc.unauthenticate(function(err) {
+		if (err && err.invalidToken)                //this is expected for invalid tokens
+			console.log("invalid token")
+		else if (err)
+			console.log("error:", err.message)      //this is never expected, but can happen
+		else
+			console.log("you have been logged out") //this is expected for valid tokens
+	})
