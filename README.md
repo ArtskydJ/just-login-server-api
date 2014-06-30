@@ -4,12 +4,12 @@ just-login-server-api
 - [Information](#information)
 - [Install](#install)
 - [Require and Construct](#require-and-construct)
-- [jsla methods](#jsla-methods)
+- [jlsa methods](#jlsa-methods)
 - [jlsa.createNewSession(cb)](#jlsacreatenewsessioncb)
 - [jlsa.continueExistingSession(sessionId, cb)](#jlsacontinueexistingsessionsessionid-cb)
-- [api methods](#api-methods)
-- [api.isAuthenticated(cb)](#apiisauthenticatedcb)
-- [api.beginAuthentication(contactAddress)](#apibeginauthenticationcontactaddress)
+	- [api methods](#api-methods)
+	- [api.isAuthenticated(cb)](#apiisauthenticatedcb)
+	- [api.beginAuthentication(contactAddress)](#apibeginauthenticationcontactaddress)
 
 ##Information
 
