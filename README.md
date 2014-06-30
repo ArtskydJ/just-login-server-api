@@ -5,9 +5,9 @@ just-login-server-api
 - [Install](#install)
 - [Require and Construct](#require-and-construct)
 - [jlsa methods](#jlsa-methods)
-- [jlsa.createNewSession(cb)](#jlsacreatenewsessioncb)
-- [jlsa.continueExistingSession(sessionId, cb)](#jlsacontinueexistingsessionsessionid-cb)
-	- [api methods](#api-methods)
+	- [jlsa.createNewSession(cb)](#jlsacreatenewsessioncb)
+	- [jlsa.continueExistingSession(sessionId, cb)](#jlsacontinueexistingsessionsessionid-cb)
+- [api methods](#api-methods)
 	- [api.isAuthenticated(cb)](#apiisauthenticatedcb)
 	- [api.beginAuthentication(contactAddress)](#apibeginauthenticationcontactaddress)
 
@@ -42,7 +42,7 @@ Merge the modules:
 
 ##jlsa methods
 
-###jlsa.createNewSession(cb) //err api sessionid
+###jlsa.createNewSession(cb)
 
 	jlsa.createNewSession(function (err, api, sessionId) {
 		if (!err) {
@@ -53,7 +53,7 @@ Merge the modules:
 		}
 	})
 
-###jlsa.continueExistingSession(sessionId, cb) //err api sessionid
+###jlsa.continueExistingSession(sessionId, cb)
 
 	jlsa.continueExistingSession(sessionId, function(err, api, sessionId) {
 		if (!err) {
