@@ -70,7 +70,7 @@ Merge the modules:
 
 ##api methods
 
-These methods are from the `api` argument from either [createNewSession()](#jlsacreatenewsessioncb) or [continueExistingSession](#jlsacontinueexistingsessionsessionid-cb).
+These methods are from the `api` argument from either [createNewSession()](#jlsacreatenewsessioncb) or [continueExistingSession()](#jlsacontinueexistingsessionsessionid-cb).
 
 ###api.isAuthenticated(cb)
 
