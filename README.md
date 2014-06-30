@@ -10,6 +10,7 @@ just-login-server-api
 - [api methods](#api-methods)
 	- [api.isAuthenticated(cb)](#apiisauthenticatedcb)
 	- [api.beginAuthentication(contactAddress)](#apibeginauthenticationcontactaddress)
+	- [api.unauthenticate(cb)](#apiunauthenticatecb)
 
 ##Information
 
@@ -70,22 +71,24 @@ Merge the modules:
 
 ##api methods
 
-These methods are from the `api` argument from either [createNewSession()](#jlsacreatenewsessioncb) or [continueExistingSession()](#jlsacontinueexistingsessionsessionid-cb).
+These methods are from the `api` argument from either `[createNewSession()](#jlsacreatenewsessioncb)` or `[continueExistingSession()](#jlsacontinueexistingsessionsessionid-cb)`.
 
 ###api.isAuthenticated(cb)
 
-Calls the callback with null or a contact address if authenticated
+`cb` has the arguments: `err`, and `contactAddress`, respectively.
+
+`contactAddress` will be null if not authenticated; it will be a contact address if authenticated.
 
 Example of an authenticated user (a user who was logged in previously)
 
-	api.isAuthenticated("previouslyLoggedInSessionId", function(err, contactAddress) {
+	api.isAuthenticated(function(err, contactAddress) {
 		if (!err)
 			console.log(contactAddress) //logs: "fake@example.com"
 	})
 
 Example of an unauthenticated user (a user who was NOT logged in previously)
 
-	api.isAuthenticated("notPreviouslyLoggedInSessionId", function(err, contactAddress) {
+	api.isAuthenticated(function(err, contactAddress) {
 		if (!err)
 			console.log(contactAddress) //logs: ""
 	})
@@ -94,7 +97,8 @@ Example of an unauthenticated user (a user who was NOT logged in previously)
 
 Emits an event with a secret token and the contact address, so somebody can go send a message to that address.
 
-	var emitAuth = jlsa.beginAuthentication("wantToLogInSessionId", "fake@example.com")
+	var emitAuth = jlsa.beginAuthentication("fake@example.com")
+
 	emitAuth.on('authentication initiated', function(authInit) {
 		console.log(authInit.token)     //logs the secret token
 		console.log(authInit.sessionId) //logs the session id
@@ -102,13 +106,15 @@ Emits an event with a secret token and the contact address, so somebody can go s
 
 (Suggestion: use the [Just-Login-Emailer](https://github.com/coding-in-the-wild/just-login-emailer) or my fork of the same [emailer](https://github.com/ArtskydJ/just-login-emailer) to catch the event.)
 
-###api.unauthenticate(contactAddress)
+###api.unauthenticate(cb)
 
-Logs a user out
+Logs a user out.
+
+`cb` has the argument: `err`
 
 	jlc.unauthenticate(function(err) {
-		if (err && err.invalidToken)                //this is expected for invalid tokens
-			console.log("invalid token")
+		if (err && err.invalidToken)
+			console.log("invalid token")            //this is expected for invalid tokens
 		else if (err)
 			console.log("error:", err.message)      //this is never expected, but can happen
 		else
