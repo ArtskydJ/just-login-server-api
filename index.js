@@ -37,20 +37,3 @@ module.exports = function(justLoginCore) { //Exposed to the browser via dnode
 		continueExistingSession: continueExistingSession.bind(null, justLoginCore)
 	}
 }
-
-/*
-var events = require('events')
-
-	var emitter = new events.EventEmitter()
-	var loggedIn, prevLoggedIn
-	emitter.beginAuthentication = jlc.beginAuthentication.bind(jlc, sessionId)
-	emitter.isAuthenticated =     jlc.isAuthenticated.bind(jlc, sessionId)
-	emitter.unauthenticate =      jlc.unauthenticate.bind(jlc, sessionId)
-	prevLoggedIn = emitter.isAuthenticated()
-	setInterval(function() {
-		loggedIn = emitter.isAuthenticated()
-		if (loggedIn != prevLoggedIn) {
-			emitter.emit('log'+loggedIn?'in':'out')
-		}
-	}, 1000)
-*/
