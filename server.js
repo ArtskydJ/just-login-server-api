@@ -1,15 +1,10 @@
-var http = require('http')
-var dnode = require('dnode')
-var shoe = require('shoe')
 var url = require('url')
 var send = require('send')
-var Router = require('router')
 
 var route = Router()
 var api = require('./api.js')
-var server = http.createServer()
 
-server.on('request', function (req, res) {
+var requestListener = function requestListener(req, res) {
 	send(req, url.parse(req.url).pathname, {root: ""})
 		.on('error', function (err) {
 			console.log("err:", err.message)
@@ -33,10 +28,4 @@ route.all("", function(req, res) {
 	console.log("routing lol")
 })
 
-var sock = shoe(function (stream) {
-	var d = dnode(api)
-	d.pipe(stream).pipe(d)
-})
-sock.install(server, '/dnode') //name of socket?
-
-module.exports = server
+module.exports = requestListener
