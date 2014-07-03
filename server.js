@@ -1,11 +1,11 @@
 var url = require('url')
 var send = require('send')
+var Router = require('router')
 
-var route = Router()
-var api = require('./api.js')
+var router = Router()
 
 var requestListener = function requestListener(req, res) {
-	send(req, url.parse(req.url).pathname, {root: ""})
+	send(req, url.parse(req.url).pathname, {root: "./static/"})
 		.on('error', function (err) {
 			console.log("err:", err.message)
 		})
@@ -19,12 +19,12 @@ var requestListener = function requestListener(req, res) {
 			res.end('Redirecting to ' + req.url + '/');
 		}).on('headers', function (res, path, stat) {
 			console.log('headers')
-			res.setHeader('Content-Disposition', 'attachment');
+			//res.setHeader('Content-Disposition', 'attachment'); //this made me download the file
 		})
 		.pipe(res)
-})
+}
 
-route.all("", function(req, res) {
+router.all(".*", function(req, res) {
 	console.log("routing lol")
 })
 
