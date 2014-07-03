@@ -2,7 +2,7 @@
   "name": "just-login-server-api",
   "version": "0.0.1",
   "description": "Server code for the Just Login module",
-  "main": "index.js",
+  "main": "server.js",
   "dependencies": {
     "send": "^0.5.0"
   },

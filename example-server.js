@@ -1,8 +1,9 @@
 var dnode = require('dnode')
 var browserApi = require('./browserApi.js')
 var fs = require('fs')
-var http = require('http');
-var shoe = require('shoe');
+var http = require('http')
+var shoe = require('shoe')
+//var send = require('send')
 
 
 /*var server = http.createServer();
@@ -19,7 +20,7 @@ var server = http.createServer().listen(9999).on('request', function(req, res) {
 })
 
 var sock = shoe(function (stream) {
-	var d = dnode(browserApi);
-	d.pipe(stream).pipe(d);
-});
-sock.install(server, '/dnode');
+	var d = dnode(browserApi)
+	d.pipe(stream).pipe(d)
+})
+sock.install(server, '/dnode')
