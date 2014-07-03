@@ -1,12 +1,16 @@
-function Server(port) {
-	var dnode = require('dnode')
-	var http = require('http')
-	var shoe = require('shoe')
-	var url = require('url')
-	var send = require('send')
-	var api = require('./api.js')
+var dnode = require('dnode')
+var http = require('http')
+var shoe = require('shoe')
+var url = require('url')
+var send = require('send')
+var Router = require('router')
 
-	var server = http.createServer().on('request', function (req, res) {
+var jlServer = function jlServer(port) {
+	var route = Router()
+	var api = require('./api.js')
+	var server = http.createServer()
+
+	server.on('request', function (req, res) {
 		send(req, url.parse(req.url).pathname, {root: ""})
 			.on('error', function (err) {
 				console.log("err:", err.message)
@@ -27,9 +31,17 @@ function Server(port) {
 	})
 	server.listen(port)
 
+	route.all("", function(req, res) {
+		console.log("routing lol")
+	})
+
 	var sock = shoe(function (stream) {
 		var d = dnode(api)
 		d.pipe(stream).pipe(d)
 	})
 	sock.install(server, '/dnode') //name of socket?
+
+	return server
 }
+
+module.exports = jlServer

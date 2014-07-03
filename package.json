@@ -4,6 +4,7 @@
   "description": "Server code for the Just Login module",
   "main": "server.js",
   "dependencies": {
+    "router": "^0.6.2",
     "send": "^0.5.0"
   },
   "devDependencies": {
