@@ -12,7 +12,7 @@ test('test for new session', function(t) {
 			t.equal(sId, sessionIdentification, "session ID matches")
 			t.equal(typeof addr, "string", "the contact address is a string :)")
 		},
-		unAuthenticate: function(sId) {
+		unauthenticate: function(sId) {
 			t.equal(sId, sessionIdentification, "session ID is correct")
 		}
 	})
@@ -20,7 +20,7 @@ test('test for new session', function(t) {
 		sessionIdentification = sessionId
 		fullApi.isAuthenticated()
 		fullApi.beginAuthentication("I am a string")
-		fullApi.unAuthenticate()
+		fullApi.unauthenticate()
 		t.end()
 	})
 })
@@ -39,7 +39,7 @@ test('test for continued sesssion', function(t) {
 			t.equal(typeof addr, "string", "the contact address is a string :)")
 			t.equal(addr, contactAddress, "the contact address is.")
 		},
-		unAuthenticate: function(sId) {
+		unauthenticate: function(sId) {
 			t.equal(sId, sessionIdentification, "session ID is correct")
 		}
 	})
@@ -47,6 +47,6 @@ test('test for continued sesssion', function(t) {
 	jlsa.continueExistingSession(sessionIdentification, function(err, api, session) {
 		t.equal(session, sessionIdentification, "yes the session id still matches")
 		api.beginAuthentication(contactAddress)
-		api.unAuthenticate()
+		api.unauthenticate()
 	})
 })
