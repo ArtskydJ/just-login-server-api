@@ -20,14 +20,17 @@ function createNewSession(jlc, cb) { //cb(err, api, sessionId)
 
 function continueExistingSession(jlc, sessionId, cb) { //cb(err, api, sessionId)
 	jlc.isAuthenticated(sessionId, function(err, addr) {
-		if (err)
+		if (err) {
+			err.ces = true
 			cb(err)
-		else if (!addr) {
+		} else if (!addr) {
 			var temp = new Error("Invalid Session Id")
 			temp.invalidSessionId = true
+			temp.ces = true
 			cb(temp)
-		} else
+		} else {
 			cb(null, getFullApi(jlc, sessionId), sessionId)
+		}
 	})
 }
 
