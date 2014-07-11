@@ -95,11 +95,11 @@ Example of an unauthenticated user (a user who was NOT logged in previously)
 
 ###api.beginAuthentication(contactAddress)
 
-Emits an event with a secret token and the contact address, so somebody can go send a message to that address.
+The just-login-core emits an event with a secret token and the contact address, so somebody can go send a message to that address. This event is emitted when jlc.beginAuthentication is called. When using the just-login-core and the just-login-server-api together, the just-login-core will emit an event when the just-login-server-api's `beginAuthentication()` is called.
 
-	var emitAuth = jlsa.beginAuthentication("fake@example.com")
+	jlsa.beginAuthentication("fake@example.com")
 
-	emitAuth.on('authentication initiated', function(authInit) {
+	jlc.on('authentication initiated', function(authInit) { //Note that this is jlc, not jlsa
 		console.log(authInit.token)     //logs the secret token
 		console.log(authInit.sessionId) //logs the session id
 	})
