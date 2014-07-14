@@ -3,7 +3,7 @@ just-login-server-api
 
 - [Information](#information)
 - [Install](#install)
-- [Require and Construct](#require-and-construct)
+- [Jlsa(jlc)](#jlsajlc)
 - [jlsa methods](#jlsa-methods)
 	- [jlsa.createNewSession(cb)](#jlsacreatenewsessioncb)
 	- [jlsa.continueExistingSession(sessionId, cb)](#jlsacontinueexistingsessionsessionid-cb)
@@ -20,25 +20,24 @@ The constructor takes a just-login-core constructed object
 
 ##Install
 
-Install with npm:
+Will need the [Just-Login-Core](github.com/ArtskydJ/just-login-core) module also. (Or an object that closely resembles a Just-Login-Core.)
 
-	npm install just-login-server-api
+Install both with npm:
+
+	npm install just-login-server-api just-login-core
 	
-##Require and Construct
+##Jlsa(jlc)
 
-Require:
+Require both:
 
 	var Jlsa = require('just-login-server-api')
-
-Set up a Just Login Core object:
-
 	var Jlc = require('just-login-core')
+
+Set up the server-api with a core and the core with a levelup database:
+
 	var level = require('level-mem')
 	var db = level('uniqueNameHere')
 	var jlc = Jlc(db)
-
-Merge the modules:
-
 	var jlsa = Jlsa(jlc)
 
 ##jlsa methods
@@ -75,27 +74,33 @@ These methods are from the `api` argument from either [`createNewSession()`](#jl
 
 ###api.isAuthenticated(cb)
 
-`cb` has the arguments: `err`, and `contactAddress`, respectively.
+Checks if a user is authenticated. (Logged in.)
 
-`contactAddress` will be null if not authenticated; it will be a contact address if authenticated.
+- `cb` is a function with these arguments: `err`, `contactAddress`.
+	- `err` is null if there was no error, and is an Error object if there was an error.
+	- `contactAddress` is null is the user is not authenticated, and is a string of their contact address if they are authenticated.
 
-Example of an authenticated user (a user who was logged in previously)
+Example of an authenticated user:
 
-	api.isAuthenticated(function(err, contactAddress) {
+	jlc.isAuthenticated(function(err, contactAddress) {
 		if (!err)
 			console.log(contactAddress) //logs: "fake@example.com"
 	})
 
-Example of an unauthenticated user (a user who was NOT logged in previously)
+Example of an unauthenticated user:
 
-	api.isAuthenticated(function(err, contactAddress) {
+	jlc.isAuthenticated(function(err, contactAddress) {
 		if (!err)
-			console.log(contactAddress) //logs: ""
+			console.log(contactAddress) //logs: "null"
 	})
 
 ###api.beginAuthentication(contactAddress)
 
 The just-login-core emits an event with a secret token and the contact address, so somebody can go send a message to that address. This event is emitted when jlc.beginAuthentication is called. When using the just-login-core and the just-login-server-api together, the just-login-core will emit an event when the just-login-server-api's `beginAuthentication()` is called.
+
+- `contactAddress` is string of the user's contact info, (usually an email address).
+
+Example:
 
 	jlsa.beginAuthentication("fake@example.com")
 
@@ -110,13 +115,14 @@ The just-login-core emits an event with a secret token and the contact address, 
 
 Logs a user out.
 
-`cb` has the argument: `err`
+- `cb` is expected to be a function with the following argument:
+	- `err` is either null or an error object.
+
+Example:
 
 	jlc.unauthenticate(function(err) {
-		if (err && err.invalidToken)
-			console.log("invalid token")            //this is expected for invalid tokens
-		else if (err)
-			console.log("error:", err.message)      //this is never expected, but can happen
+		if (err)
+			console.log("error:", err.message) //this is expected for invalid tokens (not previously logged in)
 		else
-			console.log("you have been logged out") //this is expected for valid tokens
+			console.log("you have been logged out") //this is expected for valid tokens (previously logged in)
 	})

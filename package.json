@@ -1,6 +1,6 @@
 {
   "name": "just-login-server-api",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Server code for the Just Login module",
   "main": "index.js",
   "dependencies": {
