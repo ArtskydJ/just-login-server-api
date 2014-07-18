@@ -1,6 +1,6 @@
 {
   "name": "just-login-server-api",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Server code for the Just Login module",
   "main": "index.js",
   "dependencies": {
@@ -13,12 +13,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/ArtskydJ/just-login-server-api.git"
+    "url": "http://github.com/coding-in-the-wild/just-login-server-api.git"
   },
   "author": "josephdykstra@gmail.com",
   "license": "mit",
   "bugs": {
-    "url": "https://github.com/ArtskydJ/just-login-server-api/issues"
+    "url": "https://github.com/coding-in-the-wild/just-login-server-api/issues"
   },
-  "homepage": "https://github.com/ArtskydJ/just-login-server-api"
+  "homepage": "https://github.com/coding-in-the-wild/just-login-server-api"
 }
