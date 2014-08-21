@@ -1,3 +1,5 @@
+var Expirer = require('expire-unused-keys')
+
 function getFullApi(jlc, sessionId) {
 	return {
 		beginAuthentication: jlc.beginAuthentication.bind(jlc, sessionId),
@@ -31,6 +33,7 @@ function continueExistingSession(jlc, sessionId, cb) { //cb(err, api, sessionId)
 }
 
 module.exports = function Jlsa(justLoginCore) { //Exposed to the browser via dnode
+    var expirer = new Expirer(86400000, db) //hey this needs a REAL db
 	return {
 		createNewSession: createNewSession.bind(null, justLoginCore),
 		continueExistingSession: continueExistingSession.bind(null, justLoginCore)

@@ -4,6 +4,7 @@
   "description": "Server code for the Just Login module",
   "main": "index.js",
   "dependencies": {
+    "expire-unused-keys": "^0.2.1"
   },
   "devDependencies": {
     "tap": "~0.4.11"
