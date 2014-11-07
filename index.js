@@ -15,12 +15,12 @@ function UUID() {
 	})
 }
 
-function createNewSession(jlc, cb) { //cb(err, api, sessionId)
+function createSession(jlc, cb) { //cb(err, api, sessionId)
 	var sessionId = UUID()
 	cb(null, getFullApi(jlc, sessionId), sessionId)
 }
 
-function continueExistingSession(jlc, sessionId, cb) { //cb(err, api, sessionId)
+function continueSession(jlc, sessionId, cb) { //cb(err, api, sessionId)
 	jlc.isAuthenticated(sessionId, function (err, addr) {
 		if (err) {
 			cb(err)
