@@ -15,27 +15,32 @@ function UUID() {
 	})
 }
 
-function createSession(jlc, cb) { //cb(err, api, sessionId)
+function createSession(jlc, expirer, cb) { //cb(err, api, sessionId)
 	var sessionId = UUID()
+	expirer.touch(sessionId)
 	cb(null, getFullApi(jlc, sessionId), sessionId)
 }
 
-function continueSession(jlc, sessionId, cb) { //cb(err, api, sessionId)
-	jlc.isAuthenticated(sessionId, function (err, addr) {
-		if (err) {
-			cb(err)
-		} else if (!addr) {
+function continueSession(jlc, expirer, sessionDb, sessionId, cb) { //cb(err, api, sessionId)
+	sessionDb.get(sessionId, function (err, authed) {
+		if (err && err.notFound) {
 			cb(new Error("Invalid Session Id"))
+		} else if (err) {
+			cb(err)
 		} else {
+			expirer.touch(sessionId)
 			cb(null, getFullApi(jlc, sessionId), sessionId)
 		}
 	})
 }
 
-module.exports = function Jlsa(justLoginCore) { //Exposed to the browser via dnode
-    var expirer = new Expirer(86400000, db) //hey this needs a REAL db
+module.exports = function sessionManager(justLoginCore, sessionDb) { //Exposed to the browser via dnode
+	var expirer = new Expirer(86400000, sessionDb) //hey this needs a REAL db
+	expirer.on('expire', function (key) {
+		sessionDb.del(key, function () {})
+	})
 	return {
-		createNewSession: createNewSession.bind(null, justLoginCore),
-		continueExistingSession: continueExistingSession.bind(null, justLoginCore)
+		createSession:     createSession.bind(null, justLoginCore, expirer),
+		continueSession: continueSession.bind(null, justLoginCore, expirer, sessionDb)
 	}
 }
