@@ -1,9 +1,23 @@
+var Expirer = require('expire-unused-keys')
+
 function getFullApi(jlc, sessionId) {
 	return {
 		beginAuthentication: jlc.beginAuthentication.bind(jlc, sessionId),
 		isAuthenticated: jlc.isAuthenticated.bind(jlc, sessionId),
 		unauthenticate: jlc.unauthenticate.bind(jlc, sessionId)
 	}
+}
+
+function UUID() {
+	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+		var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8)
+		return v.toString(16)
+	})
+}
+
+function createNewSession(jlc, cb) { //cb(err, api, sessionId)
+	var sessionId = UUID()
+	cb(null, getFullApi(jlc, sessionId), sessionId)
 }
 
 function continueExistingSession(jlc, sessionId, cb) { //cb(err, api, sessionId)
@@ -19,5 +33,9 @@ function continueExistingSession(jlc, sessionId, cb) { //cb(err, api, sessionId)
 }
 
 module.exports = function Jlsa(justLoginCore) { //Exposed to the browser via dnode
-	return continueExistingSession.bind(null, justLoginCore)
+    var expirer = new Expirer(86400000, db) //hey this needs a REAL db
+	return {
+		createNewSession: createNewSession.bind(null, justLoginCore),
+		continueExistingSession: continueExistingSession.bind(null, justLoginCore)
+	}
 }
