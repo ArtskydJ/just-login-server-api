@@ -34,8 +34,9 @@ function continueSession(jlc, expirer, sessionDb, sessionId, cb) { //cb(err, api
 	})
 }
 
-module.exports = function sessionManager(justLoginCore, sessionDb) { //Exposed to the browser via dnode
-	var expirer = new Expirer(86400000, sessionDb) //hey this needs a REAL db
+module.exports = function sessionManager(justLoginCore, sessionDb, opts) { //Exposed to the browser via dnode
+	opts = opts || {}
+	var expirer = new Expirer(opts.timeoutMs || 86400000, sessionDb, opts.checkIntervalMs || 1000) //hey this needs a REAL db
 	expirer.on('expire', function (key) {
 		sessionDb.del(key, function () {})
 	})

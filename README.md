@@ -21,18 +21,20 @@ var Core = require('just-login-core')
 
 //Construct your objects
 var db = level('./storage')
-var core = Core(db)                       //Set up the core with a levelup database
-var sessionManager = SessionManager(core) //Set up the session-manager with the core
+var sessionDb = level('./session-storage')
 
-//give the session manager's methods to your client here...
+var core = Core(db)
+var sessionManager = SessionManager(core, sessionDb)
+
+//Give the session manager's methods to your client here...
 ```
 
 Now you've got your session manager, but you need your clients to have sessions. Give your clients the session manager.
 
 ```js
-//get the session manager's methods from the server here...
+//Get the session manager's methods from the server here...
 
-//lets make a function for aquiring a session
+//Lets make a function for aquiring a session
 function aquire_session(cb) {
 	var session = localStorage.getItem('session')
 	sessionManager.continueSession(session, function (err, api, sessionId) {
@@ -58,7 +60,19 @@ aquire_session(function (err, api, sessionId) {
 	
 ```
 
+###SessionManager(core, sessionDb, opts)
+
+This is the only function/method that should be called from the server.
+
+- `core` is a just-login-core object
+- `sessionDb` is a level database object
+- `opts` is an object for your options. Optional.
+	- `timeoutMs` is a property of `opts` that sets the session's life. Optional, defaults to 1 day (`86400000`).
+	- `checkIntervalMs' is a property of `opts` that sets the interval between session death checks. Optional, defaults to 1 second (`1000`).
+
 ###sessionManager.createSession(cb)
+
+The method you call on the client to create a new session.
 
 - `cb` is a function that is called on completion, with the following arguments:
 	- `err` should be falsey or an error object
@@ -79,6 +93,8 @@ sessionManager.createSession(function (err, api, sessionId) {
 ```
 
 ###sessionManager.continueSession(sessionId, cb)
+
+The method you call on the client to attempt to use your old session.
 
 - `sessionId` is a string
 - `cb` is a function that is called on completion, with the following arguments:
@@ -101,7 +117,9 @@ sessionManager.continueSession(sessionId, function(err, api, sessionId) {
 
 #api methods
 
-These methods are from the `api` argument from either `createSession()` or `continueSession()`.
+Once you have successfully established a session, you are given a few api methods.
+
+The methods `createSession()` and `continueSession()` each have the argument `api` in their callbacks. You call these methods on your client to do authentication stuff on the server.
 
 ###api.isAuthenticated(cb)
 
@@ -112,7 +130,7 @@ Checks if a user is authenticated. (Logged in.)
 	- `contactAddress` is falsey if the session isn't authenticated, and is a string of their contact address if they are authenticated.
 
 ```js
-core.isAuthenticated(function(err, contactAddress) {
+api.isAuthenticated(function(err, contactAddress) {
 	if (!err) console.log(contactAddress)
 	//for an authenticated user, logs: example@example.com
 	//for an UNauthenticated user, logs: null
@@ -130,7 +148,7 @@ The just-login-core will emit the event, `'authentication initiated'` when this 
 sessionManager.beginAuthentication("fake@example.com")
 ```
 ```js
-//This is on the server
+//This is on the server, but can be handled by the just-login-emailer
 core.on('authentication initiated', function(authInit) { //Note that this is the core, not the sessionManager
 	console.log(authInit.token)     //logs the token
 	console.log(authInit.sessionId) //logs the session id
@@ -160,9 +178,10 @@ api.unauthenticate(function(err) {
 })
 ```
 
-Or you can write one:
+Or you can write one line of code:
+
 ```js
-api.unauthenticate()
+api.unauthenticate() //basically noop
 ```
 
 #License
