@@ -1,5 +1,5 @@
 var test = require('tap').test
-var Jlesm = require('../')
+var Jlesm = require('./')
 var level = require('level-mem')
 
 function createFakeCore(t) {
