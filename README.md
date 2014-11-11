@@ -181,7 +181,7 @@ api.unauthenticate(function(err) {
 Or you can write one line of code:
 
 ```js
-api.unauthenticate() //basically noop
+api.unauthenticate() //the callback is a noop function
 ```
 
 #License
