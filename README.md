@@ -35,26 +35,26 @@ Now you've got your session manager, but you need your clients to have sessions.
 //Get the session manager's methods from the server here...
 
 //Lets make a function for aquiring a session
-function aquire_session(cb) {
+function establishSession(cb) {
 	var session = localStorage.getItem('session')
 	sessionManager.continueSession(session, function (err, api, sessionId) {
 		if (!err) {
-			cb(err, api, sessionId)
+			cb(err, api)
 		} else {
 			sessionManager.createSession(function (err, api, sessionId) {
 				if (!err) {
 					localStorage.setItem('session', sessionId)
 				}
-				cb(err, api, sessionId)
+				cb(err, api)
 			})
 		}
 	})
 }
 
-aquire_session(function (err, api, sessionId) {
+establishSession(function (err, api) {
 	if (err) throw err
 	
-	//right here you can mess with the api
+	//right here you can do stuff with the api
 	//the documentation for the api is below
 })
 	
@@ -68,7 +68,7 @@ This is the only function/method that should be called from the server.
 - `sessionDb` is a level database object
 - `opts` is an object for your options. Optional.
 	- `timeoutMs` is a property of `opts` that sets the session's life. Optional, defaults to 1 day (`86400000`).
-	- `checkIntervalMs' is a property of `opts` that sets the interval between session death checks. Optional, defaults to 1 second (`1000`).
+	- `checkIntervalMs` is a property of `opts` that sets the interval between session death checks. Optional, defaults to 1 second (`1000`).
 
 ###sessionManager.createSession(cb)
 
