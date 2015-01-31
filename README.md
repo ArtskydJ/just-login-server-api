@@ -186,4 +186,4 @@ api.unauthenticate() //the callback is a noop function
 
 #License
 
-[MIT](opensource.org/licenses/mit)
+[VOL](http://veryopenlicense.com/)
