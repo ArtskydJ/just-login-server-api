@@ -4,7 +4,8 @@
   "description": "Server code for the Just Login module",
   "main": "index.js",
   "dependencies": {
-    "expire-unused-keys": "^1.0.4"
+    "expire-unused-keys": "^1.0.4",
+    "random-uuid-v4": "0.0.4"
   },
   "devDependencies": {
     "level-mem": "^0.18.0",
