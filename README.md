@@ -1,6 +1,8 @@
 just-login-example-session-manager
 =====================
 
+[![Build Status](https://travis-ci.org/coding-in-the-wild/just-login-example-session-manager.svg)](https://travis-ci.org/coding-in-the-wild/just-login-example-session-manager)
+
 A basic session manager for the [Just Login Example](http://github.com/coding-in-the-wild/just-login-example).
 
 Run this on your server with the [Just-Login-Core](http://github.com/coding-in-the-wild/just-login-core).
