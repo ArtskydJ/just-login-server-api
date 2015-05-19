@@ -5,13 +5,7 @@ A basic session manager for the [Just Login Example](http://github.com/coding-in
 
 Run this on your server with the [Just-Login-Core](http://github.com/coding-in-the-wild/just-login-core).
 
-##Install
-
-Install both with npm:
-
-	npm install just-login-example-session-manager just-login-core
-	
-##Usage
+# Example
 
 ```js
 //Require the modules you'll need
@@ -60,7 +54,7 @@ establishSession(function (err, api) {
 	
 ```
 
-###SessionManager(core, sessionDb, opts)
+### `SessionManager(core, sessionDb, opts)`
 
 This is the only function/method that should be called from the server.
 
@@ -70,7 +64,7 @@ This is the only function/method that should be called from the server.
 	- `timeoutMs` is a property of `opts` that sets the session's life. Optional, defaults to 1 day (`86400000`).
 	- `checkIntervalMs` is a property of `opts` that sets the interval between session death checks. Optional, defaults to 1 second (`1000`).
 
-###sessionManager.createSession(cb)
+### `sessionManager.createSession(cb)`
 
 The method you call on the client to create a new session.
 
@@ -92,7 +86,7 @@ sessionManager.createSession(function (err, api, sessionId) {
 })
 ```
 
-###sessionManager.continueSession(sessionId, cb)
+### `sessionManager.continueSession(sessionId, cb)`
 
 The method you call on the client to attempt to use your old session.
 
@@ -115,13 +109,13 @@ sessionManager.continueSession(sessionId, function(err, api, sessionId) {
 })
 ```
 
-#api methods
+# api
 
 Once you have successfully established a session, you are given a few api methods.
 
 The methods `createSession()` and `continueSession()` each have the argument `api` in their callbacks. You call these methods on your client to do authentication stuff on the server.
 
-###api.isAuthenticated(cb)
+### `api.isAuthenticated(cb)`
 
 Checks if a user is authenticated. (Logged in.)
 
@@ -137,7 +131,7 @@ api.isAuthenticated(function(err, contactAddress) {
 })
 ```
 
-###api.beginAuthentication(contactAddress)
+### `api.beginAuthentication(contactAddress)`
 
 - `contactAddress` is string of the user's contact info, (usually an email address).
 
@@ -157,7 +151,7 @@ core.on('authentication initiated', function(authInit) { //Note that this is the
 
 You can use the [Just-Login-Emailer](https://github.com/coding-in-the-wild/just-login-emailer) to catch the event.
 
-###api.unauthenticate(cb)
+### `api.unauthenticate(cb)`
 
 Logs out a session.
 
@@ -184,6 +178,12 @@ Or you can write one line of code:
 api.unauthenticate() //the callback is a noop function
 ```
 
-#License
+# Install
+
+Install both with npm:
+
+	npm install just-login-example-session-manager just-login-core
+
+# License
 
 [VOL](http://veryopenlicense.com/)
