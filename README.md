@@ -3,9 +3,9 @@ just-login-example-session-manager
 
 [![Build Status](https://travis-ci.org/coding-in-the-wild/just-login-example-session-manager.svg)](https://travis-ci.org/coding-in-the-wild/just-login-example-session-manager)
 
-A basic session manager for the [Just Login Example](http://github.com/coding-in-the-wild/just-login-example).
+A basic session manager for the [justlogin.xyz](http://github.com/coding-in-the-wild/justlogin.xyz).
 
-Run this on your server with the [Just-Login-Core](http://github.com/coding-in-the-wild/just-login-core).
+Run this on your server with the [`just-login-core`](http://github.com/coding-in-the-wild/just-login-core) and  [`just-login-session-state`](http://github.com/coding-in-the-wild/just-login-session-state).
 
 # Example
 
@@ -20,7 +20,7 @@ var db = level('./storage')
 var sessionDb = level('./session-storage')
 
 var core = Core(db)
-var sessionManager = SessionManager(core, sessionDb)
+var mngr = SessionManager(core, sessionDb)
 
 //Give the session manager's methods to your client here...
 ```
@@ -33,11 +33,11 @@ Now you've got your session manager, but you need your clients to have sessions.
 //Lets make a function for aquiring a session
 function establishSession(cb) {
 	var session = localStorage.getItem('session')
-	sessionManager.continueSession(session, function (err, api, sessionId) {
+	mngr.continueSession(session, function (err, api, sessionId) {
 		if (!err) {
 			cb(err, api)
 		} else {
-			sessionManager.createSession(function (err, api, sessionId) {
+			mngr.createSession(function (err, api, sessionId) {
 				if (!err) {
 					localStorage.setItem('session', sessionId)
 				}
@@ -56,7 +56,13 @@ establishSession(function (err, api) {
 	
 ```
 
-### `SessionManager(core, sessionDb, opts)`
+# API
+
+```
+var SessionManager = require('just-login-example-session-manager')
+```
+
+### `var mngr = SessionManager(core, sessionDb, [opts])`
 
 This is the only function/method that should be called from the server.
 
@@ -66,7 +72,7 @@ This is the only function/method that should be called from the server.
 	- `timeoutMs` is a property of `opts` that sets the session's life. Optional, defaults to 1 day (`86400000`).
 	- `checkIntervalMs` is a property of `opts` that sets the interval between session death checks. Optional, defaults to 1 second (`1000`).
 
-### `sessionManager.createSession(cb)`
+### `mngr.createSession(cb)`
 
 The method you call on the client to create a new session.
 
@@ -76,7 +82,7 @@ The method you call on the client to create a new session.
 	- `sessionId` should be a string
 
 ```js
-sessionManager.createSession(function (err, api, sessionId) {
+mngr.createSession(function (err, api, sessionId) {
 	if (!err) {
 		console.log(api)
 		//logs: { beginAuthentication: [Function], isAuthenticated: [Function], unAuthenticate: [Function] }
@@ -88,7 +94,7 @@ sessionManager.createSession(function (err, api, sessionId) {
 })
 ```
 
-### `sessionManager.continueSession(sessionId, cb)`
+### `mngr.continueSession(sessionId, cb)`
 
 The method you call on the client to attempt to use your old session.
 
@@ -99,19 +105,15 @@ The method you call on the client to attempt to use your old session.
 	- `sessionId` should be a string
 
 ```js
-sessionManager.continueSession(sessionId, function(err, api, sessionId) {
-	if (!err) {
-		console.log(api)
-		//logs: { beginAuthentication: [Function], isAuthenticated: [Function], unAuthenticate: [Function] }
-		console.log(sessionId)
-		//logs the session id string, e.g. '64BDA9CC-66A2-11E4-96D1-3BA1DFC16A55'
-	} else {
-		console.log("error:", err.message)
-	}
+mngr.continueSession(sessionId, function(err, api, sessionId) {
+	
+	if (err) { throw err }
+	console.log(api) //=> { beginAuthentication: [Function], isAuthenticated: [Function], unAuthenticate: [Function] }
+	console.log(sessionId) //=> '64BDA9CC-66A2-11E4-96D1-3BA1DFC16A55'
 })
 ```
 
-# api
+## `api`
 
 Once you have successfully established a session, you are given a few api methods.
 
@@ -141,17 +143,17 @@ The just-login-core will emit the event, `'authentication initiated'` when this 
 
 ```js
 //This is on the client
-sessionManager.beginAuthentication("fake@example.com")
+mngr.beginAuthentication("fake@example.com")
 ```
 ```js
 //This is on the server, but can be handled by the just-login-emailer
-core.on('authentication initiated', function(authInit) { //Note that this is the core, not the sessionManager
+core.on('authentication initiated', function(authInit) { // Note that this is the core, not the sessionManager
 	console.log(authInit.token)     //logs the token
 	console.log(authInit.sessionId) //logs the session id
 })
 ```
 
-You can use the [Just-Login-Emailer](https://github.com/coding-in-the-wild/just-login-emailer) to catch the event.
+You can use the [just-login-emailer](https://github.com/coding-in-the-wild/just-login-emailer) to catch the event.
 
 ### `api.unauthenticate(cb)`
 
@@ -182,9 +184,11 @@ api.unauthenticate() //the callback is a noop function
 
 # Install
 
-Install both with npm:
+Install them with npm:
 
-	npm install just-login-example-session-manager just-login-core
+	npm i just-login-core
+	npm i just-login-session-state
+	npm i just-login-example-session-manager
 
 # License
 
