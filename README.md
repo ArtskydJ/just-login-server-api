@@ -3,9 +3,11 @@ just-login-example-session-manager
 
 [![Build Status](https://travis-ci.org/coding-in-the-wild/just-login-example-session-manager.svg)](https://travis-ci.org/coding-in-the-wild/just-login-example-session-manager)
 
-A basic session manager for the [justlogin.xyz](http://github.com/coding-in-the-wild/justlogin.xyz).
+Run this on your server with [`just-login-core@1`](http://github.com/coding-in-the-wild/just-login-core).
 
-Run this on your server with the [`just-login-core`](http://github.com/coding-in-the-wild/just-login-core) and  [`just-login-session-state`](http://github.com/coding-in-the-wild/just-login-session-state).
+# Deprecation Notice
+
+This module is deprecated. [`just-login-session-state`](http://github.com/coding-in-the-wild/just-login-session-state) replaced it in `just-login-core@2`.
 
 # Example
 
